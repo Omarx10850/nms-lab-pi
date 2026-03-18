@@ -1,0 +1,8 @@
+! Cisco SNMP Configuration
+snmp-server community public RO
+snmp-server location Leeds-Lab
+snmp-server contact omar@noc-lab.local
+
+! Cisco Syslog Configuration
+logging host 192.168.0.50
+logging trap informational
