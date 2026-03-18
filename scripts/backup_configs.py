@@ -8,7 +8,7 @@ devices = [
         'device_type': 'linux',
         'host': '192.168.0.50',
         'username': 'pi',
-        'password': '492003',
+        'password': 'THE_PI_PASSWORD',
     }
 ]
 
