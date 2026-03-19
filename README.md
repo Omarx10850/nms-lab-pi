@@ -24,27 +24,14 @@ A professional-grade network monitoring server built on a Raspberry Pi, running 
 - **Purpose**: Demonstrates Cisco IOS configuration knowledge alongside the live monitoring stack
 
 ### Stack Diagram
-┌─────────────────────────────────────────────┐
-│              Raspberry Pi (nms-pi)           │
-│                192.168.0.50                  │
-│                                              │
-│  ┌─────────────┐    ┌──────────────────┐    │
-│  │   Zabbix    │───►│     Grafana      │    │
-│  │   Server    │    │      :3000       │    │
-│  │   :10051    │    └──────────────────┘    │
-│  └──────┬──────┘                            │
-│         │                                   │
-│  ┌──────▼──────┐    ┌──────────────────┐    │
-│  │  PostgreSQL │    │   Zabbix Web     │    │
-│  │   :5432     │    │      :80         │    │
-│  └─────────────┘    └──────────────────┘    │
-│                                              │
-│  ┌─────────────┐                            │
-│  │   Zabbix    │                            │
-│  │   Agent     │                            │
-│  │   :10050    │                            │
-│  └─────────────┘                            │
-└─────────────────────────────────────────────┘
+
+| Container | Image | Port | Role |
+|-----------|-------|------|------|
+| zabbix-server | zabbix-server-pgsql:6.4 | 10051 | Core monitoring engine |
+| zabbix-web | zabbix-web-nginx-pgsql:6.4 | 80 | Web interface |
+| zabbix-agent | zabbix-agent:6.4 | 10050 | Metric collection from nms-pi |
+| postgres | postgres:15 | 5432 | Zabbix database backend |
+| grafana | grafana/grafana | 3000 | Dashboard visualisation |
 
 ## Tools & Technologies
 Raspberry Pi | Zabbix | Grafana | Docker | PostgreSQL | Python | Netmiko | rsyslog | SNMP | Linux | SSH | Git
