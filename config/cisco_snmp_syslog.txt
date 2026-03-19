@@ -1,8 +1,29 @@
-! Cisco SNMP Configuration
+# ─── Cisco SNMP & Syslog Reference Configuration ─────────────────────────────
+# NMS Lab — Raspberry Pi Network Monitoring Project
+# Apply these commands to Cisco IOS routers and switches
+# to enable SNMP polling and Syslog forwarding to the NMS Pi
+#
+# NMS Pi IP: 192.168.0.50
+# SNMP Community: public (read-only)
+# ─────────────────────────────────────────────────────────────────────────────
+
+! ─── SNMP Configuration ───────────────────────────────────────────────────────
+! Enable SNMPv2c read-only access
 snmp-server community public RO
+
+! Optional: add location and contact info (visible in Zabbix)
 snmp-server location Leeds-Lab
 snmp-server contact omar@noc-lab.local
 
-! Cisco Syslog Configuration
+! ─── Syslog Configuration ─────────────────────────────────────────────────────
+! Forward Syslog messages to the NMS Pi (rsyslog on UDP 514)
 logging host 192.168.0.50
 logging trap informational
+
+! ─── Verification Commands ────────────────────────────────────────────────────
+! Verify SNMP is configured:
+!   show snmp
+!   show snmp community
+!
+! Verify Syslog is configured:
+!   show logging
