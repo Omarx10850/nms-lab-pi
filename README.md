@@ -7,13 +7,44 @@ Hybrid Network Observability Lab — Raspberry Pi, Zabbix, Grafana, Docker, Pyth
 A professional-grade network monitoring server built on a Raspberry Pi, running a containerised Zabbix + Grafana stack via Docker. Monitors real Linux infrastructure via Zabbix agent with automated alerting and daily config backups.
 
 ## Architecture
-- **Hardware**: Raspberry Pi (headless, SSH-administered)
-- **Monitoring**: Zabbix 6.4 (SNMP + Agent polling)
+
+### Physical Infrastructure
+- **Hardware**: Raspberry Pi (headless, SSH-administered, static IP 192.168.0.50)
+- **Monitoring**: Zabbix 6.4 (Agent polling, 43 metrics collected)
 - **Visualisation**: Grafana (Zabbix datasource, 3-panel dashboard)
 - **Database**: PostgreSQL 15
-- **Containerisation**: Docker + Docker Compose
+- **Containerisation**: Docker + Docker Compose (5 containers)
 - **Automation**: Python + Netmiko, cron-scheduled daily backups
 - **Logging**: rsyslog centralised syslog on port 514
+
+### Virtual Network Lab (Cisco Packet Tracer)
+- **Topology**: R1 — R2 routers, S1 — S2 switches, PC1 — PC2 endpoints
+- **Routing**: OSPF configured across all routers for dynamic route advertisement
+- **Monitoring config**: SNMPv2c and Syslog configured on all Cisco devices
+- **Purpose**: Demonstrates Cisco IOS configuration knowledge alongside the live monitoring stack
+
+### Stack Diagram
+┌─────────────────────────────────────────────┐
+│              Raspberry Pi (nms-pi)           │
+│                192.168.0.50                  │
+│                                              │
+│  ┌─────────────┐    ┌──────────────────┐    │
+│  │   Zabbix    │───►│     Grafana      │    │
+│  │   Server    │    │      :3000       │    │
+│  │   :10051    │    └──────────────────┘    │
+│  └──────┬──────┘                            │
+│         │                                   │
+│  ┌──────▼──────┐    ┌──────────────────┐    │
+│  │  PostgreSQL │    │   Zabbix Web     │    │
+│  │   :5432     │    │      :80         │    │
+│  └─────────────┘    └──────────────────┘    │
+│                                              │
+│  ┌─────────────┐                            │
+│  │   Zabbix    │                            │
+│  │   Agent     │                            │
+│  │   :10050    │                            │
+│  └─────────────┘                            │
+└─────────────────────────────────────────────┘
 
 ## Tools & Technologies
 Raspberry Pi | Zabbix | Grafana | Docker | PostgreSQL | Python | Netmiko | rsyslog | SNMP | Linux | SSH | Git
@@ -80,10 +111,3 @@ Default `zabbix/zabbix-agent:alpine-latest` pulled version 7.4 which was incompa
 - Automated daily backup script generating timestamped system snapshots, scheduled via cron
 - Gmail alerting pipeline confirmed operational on Warning+ severity triggers
 - Full infrastructure-as-code — entire stack reproducible from a single `docker compose up -d`
-```
-
-Save with **Ctrl+X → Y → Enter**, then push:
-```
-git add .
-git commit -m "Add deployment guide, challenges, and results to README"
-git push origin main
